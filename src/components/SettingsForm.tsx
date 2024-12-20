@@ -16,6 +16,7 @@ interface Settings {
   maxChunkSize: number;
   chunkOverlap: number;
   maxContextTokens: number;
+  maxContextDocuments: number;
   supabaseUrl: string;
   supabasePrivateKey: string;
 }
@@ -32,6 +33,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ onClose }) => {
     maxContextTokens: 10000,
     supabaseUrl: "",
     supabasePrivateKey: "",
+    maxContextDocuments: 100,
   });
 
   useEffect(() => {
@@ -48,6 +50,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ onClose }) => {
         "maxContextTokens",
         "supabaseUrl",
         "supabasePrivateKey",
+        "maxContextDocuments",
       ],
       (result) => {
         setSettings({
@@ -62,6 +65,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ onClose }) => {
           maxContextTokens: result.maxContextTokens || 10000,
           supabaseUrl: result.supabaseUrl || "",
           supabasePrivateKey: result.supabasePrivateKey || "",
+          maxContextDocuments: result.maxContextDocuments || 100,
         });
       },
     );
@@ -78,9 +82,12 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ onClose }) => {
     const { name, value } = e.target;
     setSettings((prev) => ({
       ...prev,
-      [name]: ["maxChunkSize", "chunkOverlap", "maxContextTokens"].includes(
-        name,
-      )
+      [name]: [
+        "maxChunkSize",
+        "chunkOverlap",
+        "maxContextTokens",
+        "maxContextDocuments",
+      ].includes(name)
         ? parseInt(value)
         : value,
     }));
@@ -192,12 +199,21 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ onClose }) => {
         />
       </div>
 
-      <div>
+      {/* <div>
         <Label>Max Context Tokens</Label>
         <Input
           type="number"
           name="maxContextTokens"
           value={settings.maxContextTokens}
+          onChange={handleChange}
+        />
+      </div> */}
+      <div>
+        <Label>Max Context Documents</Label>
+        <Input
+          type="number"
+          name="maxContextDocuments"
+          value={settings.maxContextDocuments}
           onChange={handleChange}
         />
       </div>

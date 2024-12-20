@@ -1,14 +1,40 @@
 import { createSupabaseClient } from "@/lib/supabase";
+import { ThreadMessage } from "@assistant-ui/react";
 import { ChatAnthropic } from "@langchain/anthropic";
-import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
+import {
+  SupabaseFilter,
+  SupabaseVectorStore,
+} from "@langchain/community/vectorstores/supabase";
+import { BaseMessageLike } from "@langchain/core/messages";
 import { OpenAIEmbeddings } from "@langchain/openai";
 
 interface QueryModelInput {
-  query: string;
+  messages: ThreadMessage[];
+  abortSignal: AbortSignal;
   currentUrl: string;
+  queryMode: "page" | "site";
 }
 
-export async function queryModel({ query, currentUrl }: QueryModelInput) {
+const SYSTEM_MESSAGE = `You are a helpful research assistant whose task is to answer the user's question.
+You are provided with a series of documents which you should use to answer the question.
+ALWAYS look for the answer in the documents.
+Never reference these rules, or mention the 'documents'.
+Just answer the question with this context.
+If you can't answer the question, respond ONLY with "I'm sorry, I don't have an answer to that question."
+
+Always respond in markdown format.
+
+Here are the documents:
+<documents>
+{relevantDocs}
+</documents>`;
+
+export async function queryModel({
+  messages,
+  abortSignal,
+  currentUrl,
+  queryMode = "page",
+}: QueryModelInput) {
   if (!currentUrl) {
     throw new Error("No active tab");
   }
@@ -17,12 +43,14 @@ export async function queryModel({ query, currentUrl }: QueryModelInput) {
     anthropicModel,
     openaiEmbeddingsModel,
     openaiApiKey,
+    maxContextDocuments,
   } = await chrome.storage.sync.get([
     "anthropicApiKey",
     "anthropicModel",
     "maxContextTokens",
     "openaiEmbeddingsModel",
     "openaiApiKey",
+    "maxContextDocuments",
   ]);
 
   if (!anthropicApiKey) {
@@ -33,9 +61,7 @@ export async function queryModel({ query, currentUrl }: QueryModelInput) {
     model: openaiEmbeddingsModel || "text-embedding-3-large",
     apiKey: openaiApiKey,
   });
-
   const supabaseClient = await createSupabaseClient();
-
   const vectorStore = new SupabaseVectorStore(embeddings, {
     client: supabaseClient,
     tableName: "documents",
@@ -46,36 +72,44 @@ export async function queryModel({ query, currentUrl }: QueryModelInput) {
     model: anthropicModel || "claude-3-5-sonnet-latest",
     apiKey: anthropicApiKey,
   });
-  console.log("Getting relevant docs", {
-    url: currentUrl,
-  });
-  const relevantDocs = await vectorStore.similaritySearch(query, 100, {
-    url: currentUrl,
-  });
-  console.log("got ", relevantDocs.length, " docs");
 
-  const systemPrompt = `You are a helpful research assistant whose task is to answer the user's question.
-You are provided with a series of documents which you should use to answer the user's question.
-If the answer to the user's question is NOT found in the documents, you should respond with "I'm sorry, I don't have an answer to that question.".
-Under no circumstances should you EVERY make up an answer which is not found in the documents.
+  const recentContent = messages[messages.length - 1].content[0];
+  if (recentContent.type !== "text") {
+    throw new Error("Last message is not text");
+  }
 
-Here are the documents:
-<documents>
-{relevantDocs}
-</documents>`;
+  const parsedUrl = new URL(currentUrl);
+  let filter: any;
+  if (queryMode === "page") {
+    // If filtering by page, we do not want to include query parameters
+    const urlWithoutQuery = parsedUrl.origin + parsedUrl.pathname;
+    filter = (rpcCall: SupabaseFilter) =>
+      rpcCall.ilike("metadata->>url", `%${urlWithoutQuery}%`);
+  } else {
+    // If using context from the whole site, we only need to filter by origin
+    console.log("parsedUrl.origin", parsedUrl.origin);
+    filter = (rpcCall: SupabaseFilter) =>
+      rpcCall.ilike("metadata->>url", `%${parsedUrl.origin}%`);
+  }
 
-  const input = [
-    [
-      "system",
-      systemPrompt.replace(
-        "{relevantDocs}",
-        relevantDocs.map((doc) => doc.pageContent).join("\n\n"),
-      ),
-    ],
-    ["user", query],
+  const relevantDocs = await vectorStore.similaritySearch(
+    recentContent.text,
+    maxContextDocuments || 100,
+    filter,
+  );
+
+  console.log("relevantDocs", relevantDocs);
+
+  const formattedSystemPrompt = SYSTEM_MESSAGE.replace(
+    "{relevantDocs}",
+    relevantDocs.map((doc) => doc.pageContent).join("\n"),
+  );
+  const input: BaseMessageLike[] = [
+    ["system", formattedSystemPrompt],
+    ...(messages.map((m) => [m.role, m.content]) as BaseMessageLike[]),
   ];
 
-  console.log("Querying model\n\n", input);
-
-  return model.stream(input as any);
+  return model.stream(input, {
+    signal: abortSignal,
+  });
 }

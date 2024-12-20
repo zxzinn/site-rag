@@ -6,10 +6,10 @@ import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 
 interface IndexDataInput {
   url: string;
-  mode?: "scrape" | "crawl";
+  mode: "scrape" | "crawl";
 }
 
-export async function indexData({ url, mode = "scrape" }: IndexDataInput) {
+export async function indexData({ url, mode }: IndexDataInput): Promise<any> {
   const {
     fireCrawlApiKey,
     openaiApiKey,
@@ -48,6 +48,9 @@ export async function indexData({ url, mode = "scrape" }: IndexDataInput) {
     url,
     apiKey: fireCrawlApiKey,
     mode,
+    params: {
+      ...(mode === "crawl" ? { allowBackwardLinks: true } : {}),
+    },
   });
 
   let docs = await client.load();
