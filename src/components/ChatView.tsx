@@ -20,10 +20,10 @@ export default function ChatView({
         />
         <Label htmlFor="query-mode">Query Site</Label>
       </div>
-      <span className="text-muted-foreground max-w-1/2 text-pretty">
-        Only if you've already indexed the entire site. Defaults to querying the
-        current page.
-      </span>
+      <div className="text-muted-foreground w-2/3 text-pretty">
+        Filters indexed documents by base URL. If unchecked, will filter by
+        current page URL.
+      </div>
       <Thread />
     </div>
   );

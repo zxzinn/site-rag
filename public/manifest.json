@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Browser AI QA",
+  "name": "Site RAG",
   "version": "0.0.1",
   "description": "A Chrome extension for question-answer over websites",
   "action": {

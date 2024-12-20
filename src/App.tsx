@@ -9,7 +9,7 @@ import ChatView from "./components/ChatView";
 const App: React.FC = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [currentUrl, setCurrentUrl] = useState<string>("");
-  const [queryMode, setQueryMode] = useState<"page" | "site">("page");
+  const [queryMode, setQueryMode] = useState<"page" | "site">("site");
 
   useEffect(() => {
     chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
@@ -26,10 +26,16 @@ const App: React.FC = () => {
     <RuntimeProvider queryMode={queryMode}>
       <div className="w-[600px] h-[600px] p-4 bg-white">
         <div className="flex items-center justify-between mb-4">
-          <Index currentUrl={currentUrl} />
+          <p className="text-2xl font-semibold text-black tracking-tighter">
+            Site<span className="font-extrabold text-red-600">RAG</span>
+          </p>
           <Button variant="ghost" onClick={toggleSettings}>
             <Settings size={24} />
           </Button>
+        </div>
+
+        <div className="mb-3">
+          <Index currentUrl={currentUrl} />
         </div>
 
         {showSettings ? (
