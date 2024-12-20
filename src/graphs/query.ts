@@ -83,11 +83,12 @@ export async function queryModel({
   if (queryMode === "page") {
     // If filtering by page, we do not want to include query parameters
     const urlWithoutQuery = parsedUrl.origin + parsedUrl.pathname;
+    console.log("Filtering documents which contain URL", urlWithoutQuery);
     filter = (rpcCall: SupabaseFilter) =>
       rpcCall.ilike("metadata->>url", `%${urlWithoutQuery}%`);
   } else {
     // If using context from the whole site, we only need to filter by origin
-    console.log("parsedUrl.origin", parsedUrl.origin);
+    console.log("Filtering documents which contain URL", parsedUrl.origin);
     filter = (rpcCall: SupabaseFilter) =>
       rpcCall.ilike("metadata->>url", `%${parsedUrl.origin}%`);
   }
@@ -98,7 +99,7 @@ export async function queryModel({
     filter,
   );
 
-  console.log("relevantDocs", relevantDocs);
+  console.log("Got", relevantDocs.length, "relevant docs");
 
   const formattedSystemPrompt = SYSTEM_MESSAGE.replace(
     "{relevantDocs}",
