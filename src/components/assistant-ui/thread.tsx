@@ -17,13 +17,25 @@ import { Switch } from "../ui/switch";
 interface ThreadProps {
   queryMode: "page" | "site";
   setQueryMode: React.Dispatch<React.SetStateAction<"page" | "site">>;
+  retrievalMode: "base" | "multi";
+  setRetrievalMode: React.Dispatch<React.SetStateAction<"base" | "multi">>;
 }
 
-export const Thread: FC<ThreadProps> = ({ queryMode, setQueryMode }) => {
+export const Thread: FC<ThreadProps> = ({
+  queryMode,
+  setQueryMode,
+  retrievalMode,
+  setRetrievalMode,
+}) => {
   return (
     <ThreadPrimitive.Root className="bg-background h-full">
       <ThreadPrimitive.Viewport className="flex h-full flex-col items-center overflow-y-scroll scroll-smooth bg-inherit px-4 pt-8">
-        <ThreadWelcome queryMode={queryMode} setQueryMode={setQueryMode} />
+        <ThreadWelcome
+          queryMode={queryMode}
+          setQueryMode={setQueryMode}
+          retrievalMode={retrievalMode}
+          setRetrievalMode={setRetrievalMode}
+        />
 
         <ThreadPrimitive.Messages
           components={{
@@ -42,7 +54,7 @@ export const Thread: FC<ThreadProps> = ({ queryMode, setQueryMode }) => {
   );
 };
 
-const ThreadWelcome: FC<ThreadProps> = ({ queryMode, setQueryMode }) => {
+const ThreadWelcome: FC<ThreadProps> = ({ queryMode, setQueryMode, retrievalMode, setRetrievalMode }) => {
   return (
     <ThreadPrimitive.Empty>
       <div className="flex flex-grow gap-3 flex-col items-center justify-center">
@@ -59,6 +71,19 @@ const ThreadWelcome: FC<ThreadProps> = ({ queryMode, setQueryMode }) => {
         <p className="text-muted-foreground w-2/3 text-pretty">
           Filters indexed documents by base URL. If unchecked, will filter by
           current page URL.
+        </p>
+        <div className="flex items-center space-x-2">
+          <Switch
+            checked={retrievalMode === "multi"}
+            onCheckedChange={(checked) =>
+              setRetrievalMode(checked ? "multi" : "base")
+            }
+            id="retrieval-mode"
+          />
+          <Label htmlFor="retrieval-mode">Multi-query mode</Label>
+        </div>
+        <p className="text-muted-foreground w-2/3 text-pretty">
+          Multi-query mode will generate multiple queries similar to your input to be used for semantic search.
         </p>
       </div>
     </ThreadPrimitive.Empty>

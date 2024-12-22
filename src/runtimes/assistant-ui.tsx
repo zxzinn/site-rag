@@ -34,10 +34,12 @@ export function RuntimeProvider({
   children,
   queryMode,
   model,
+  retrievalMode,
 }: Readonly<{
   children: ReactNode;
   queryMode: "page" | "site";
   model: Model;
+  retrievalMode: "base" | "multi";
 }>) {
   const [currentUrl, setCurrentUrl] = useState<string>("");
 
@@ -49,7 +51,7 @@ export function RuntimeProvider({
   }, []);
 
   const runtime = useLocalRuntime(
-    ModelAdapter({ currentUrl, queryMode, model }),
+    ModelAdapter({ currentUrl, queryMode, model, retrievalMode }),
   );
 
   return (

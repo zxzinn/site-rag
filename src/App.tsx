@@ -13,6 +13,7 @@ const App: React.FC = () => {
   const [currentUrl, setCurrentUrl] = useState<string>("");
   const [queryMode, setQueryMode] = useState<"page" | "site">("site");
   const [model, setModel] = useState<Model>("gpt-4o");
+  const [retrievalMode, setRetrievalMode] = useState<"base" | "multi">("base");
 
   useEffect(() => {
     chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
@@ -26,7 +27,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <RuntimeProvider queryMode={queryMode} model={model}>
+    <RuntimeProvider queryMode={queryMode} model={model} retrievalMode={retrievalMode}>
       <div className="w-[700px] h-[600px] rounded-3xl p-4 bg-white">
         <div className="flex items-center justify-between mb-4">
           <p className="text-2xl font-semibold text-black tracking-tighter">
@@ -47,7 +48,7 @@ const App: React.FC = () => {
         {showSettings ? (
           <SettingsForm onClose={() => setShowSettings(false)} />
         ) : (
-          <ChatView queryMode={queryMode} setQueryMode={setQueryMode} />
+          <ChatView queryMode={queryMode} setQueryMode={setQueryMode} retrievalMode={retrievalMode} setRetrievalMode={setRetrievalMode} />
         )}
       </div>
     </RuntimeProvider>
