@@ -27,7 +27,7 @@ const App: React.FC = () => {
 
   return (
     <RuntimeProvider queryMode={queryMode} model={model}>
-      <div className="w-[600px] h-[600px] rounded-3xl p-4 bg-white">
+      <div className="w-[700px] h-[600px] rounded-3xl p-4 bg-white">
         <div className="flex items-center justify-between mb-4">
           <p className="text-2xl font-semibold text-black tracking-tighter">
             Site<span className="font-extrabold text-red-600">RAG</span>
