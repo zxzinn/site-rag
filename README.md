@@ -2,6 +2,8 @@
 
 [Demo video](https://www.loom.com/share/2ee8496a17774577b2684d6b2981bd1a)
 
+![Screenshot of Site RAG Chrome extension](./public/screenshot.png)
+
 A Chrome extension for asking questions over websites. Site RAG can index a single page of the website, or crawl the entire site. It then generates embeddings for the indexed documents, and stores them in a vector store database.
 
 When a user asks a question, Site RAG will either fetch relevant documents from the current page, or the entire site (customizable).
