@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
-import { Button } from "./ui/button";
 import { format } from "date-fns";
 import { getLastIndexed } from "@/lib/last-indexed";
-import { indexData } from "@/graphs/index";
+import { indexData } from "@/graphs/_index";
+import { Button } from "../ui/button";
+import {
+  IndexPageConfirmDialog,
+  IndexSiteConfirmDialog,
+} from "./IndexConfirmDialog";
 
 interface IngestProps {
   currentUrl: string;
@@ -18,10 +22,18 @@ export default function Index({ currentUrl }: IngestProps) {
     getLastIndexed(currentUrl).then(setLastIndexed);
   }, [currentUrl]);
 
-  const handleIndex = async (mode: "scrape" | "crawl") => {
+  const handleIndex = async (
+    mode: "scrape" | "crawl",
+    options?: { allowBackwardLinks?: boolean; clearExisting?: boolean },
+  ) => {
     setLoading(true);
     try {
-      const { docs } = await indexData({ url: currentUrl, mode });
+      const { docs } = await indexData({
+        url: currentUrl,
+        mode,
+        allowBackwardLinks: options?.allowBackwardLinks || false,
+        clearExisting: options?.clearExisting || false,
+      });
       setNumberDocsIndexed(docs.length);
     } catch (error) {
       console.error("Error ingesting data:", error);
@@ -40,7 +52,7 @@ export default function Index({ currentUrl }: IngestProps) {
         ) : (
           <p>No active tab</p>
         )}
-        {lastIndexed ? (
+        {lastIndexed && numberDocsIndexed == null ? (
           <p>
             <span className="text-gray-600">Last indexed:</span>{" "}
             {format(new Date(lastIndexed), "MM/dd/yy HH:mm")}
@@ -54,20 +66,8 @@ export default function Index({ currentUrl }: IngestProps) {
       </div>
 
       <div className="flex gap-1">
-        <Button
-          variant="outline"
-          disabled={loading}
-          onClick={() => handleIndex("scrape")}
-        >
-          Index Page
-        </Button>
-        <Button
-          variant="outline"
-          disabled={loading}
-          onClick={() => handleIndex("crawl")}
-        >
-          Index Site
-        </Button>
+        <IndexPageConfirmDialog disabled={loading} handleSubmit={handleIndex} />
+        <IndexSiteConfirmDialog disabled={loading} handleSubmit={handleIndex} />
       </div>
     </div>
   );

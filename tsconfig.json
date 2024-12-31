@@ -15,7 +15,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "allowJs": true,
-    "types": ["chrome", "node"],
+    "types": ["chrome", "node", "jest"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
