@@ -3,8 +3,8 @@ import { describe, expect, it } from "@jest/globals";
 import { v4 as uuidv4 } from "uuid";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
-// import clearDocs from "@/lib/clear-docs";
 import { createSupabaseClient } from "@/lib/supabase";
+import clearDocs from "@/lib/clear-docs";
 
 describe("Clearing documents", () => {
   it("Can clear existing documents by URL", async () => {
@@ -19,7 +19,7 @@ describe("Clearing documents", () => {
       "https://langchain.com/page-2",
       "https://langchain.com/page-1/highlight",
     ];
-    // const allUrlsToDelete = allUrls.slice(1);
+    const allUrlsToDelete = allUrls.slice(1);
     const docs = [
       new Document({
         id: uuidv4(),
@@ -62,7 +62,6 @@ describe("Clearing documents", () => {
       model: "text-embedding-3-large",
       apiKey: process.env.OPENAI_API_KEY,
     });
-
     const supabaseClient = await createSupabaseClient();
     const vectorStore = new SupabaseVectorStore(embeddings, {
       client: supabaseClient,
@@ -87,18 +86,18 @@ describe("Clearing documents", () => {
       allUrls.sort(),
     );
 
-    // await clearDocs({ currentUrls: allUrlsToDelete });
+    await clearDocs({ currentUrls: allUrlsToDelete });
 
-    // const { data: shouldContainSingle, error } = await supabaseClient
-    //   .from("documents")
-    //   .select("*")
-    //   .in("metadata->>url", allUrls);
+    const { data: shouldContainSingle, error } = await supabaseClient
+      .from("documents")
+      .select("*")
+      .in("metadata->>url", allUrls);
 
-    // expect(shouldContainSingle?.length).toBe(1);
-    // expect(shouldContainSingle?.[0].metadata.url).toBe(allUrls[0]);
-    // expect(error).toBeFalsy();
+    expect(shouldContainSingle?.length).toBe(1);
+    expect(shouldContainSingle?.[0].metadata.url).toBe(allUrls[0]);
+    expect(error).toBeFalsy();
 
     // Cleanup
-    // await clearDocs({ currentUrls: [allUrls[0]] });
+    await clearDocs({ currentUrls: [allUrls[0]] });
   });
 });
