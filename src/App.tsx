@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Settings } from "lucide-react";
 import SettingsForm from "./components/SettingsForm";
-import Index from "./components/Index";
+import Index from "./components/index-site/index";
 import { Button } from "./components/ui/button";
 import { RuntimeProvider } from "./runtimes/assistant-ui";
 import ChatView from "./components/ChatView";
@@ -27,7 +27,11 @@ const App: React.FC = () => {
   };
 
   return (
-    <RuntimeProvider queryMode={queryMode} model={model} retrievalMode={retrievalMode}>
+    <RuntimeProvider
+      queryMode={queryMode}
+      model={model}
+      retrievalMode={retrievalMode}
+    >
       <div className="w-[700px] h-[600px] rounded-3xl p-4 bg-white">
         <div className="flex items-center justify-between mb-4">
           <p className="text-2xl font-semibold text-black tracking-tighter">
@@ -48,7 +52,12 @@ const App: React.FC = () => {
         {showSettings ? (
           <SettingsForm onClose={() => setShowSettings(false)} />
         ) : (
-          <ChatView queryMode={queryMode} setQueryMode={setQueryMode} retrievalMode={retrievalMode} setRetrievalMode={setRetrievalMode} />
+          <ChatView
+            queryMode={queryMode}
+            setQueryMode={setQueryMode}
+            retrievalMode={retrievalMode}
+            setRetrievalMode={setRetrievalMode}
+          />
         )}
       </div>
     </RuntimeProvider>

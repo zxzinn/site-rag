@@ -54,37 +54,48 @@ export const Thread: FC<ThreadProps> = ({
   );
 };
 
-const ThreadWelcome: FC<ThreadProps> = ({ queryMode, setQueryMode, retrievalMode, setRetrievalMode }) => {
+const ThreadWelcome: FC<ThreadProps> = ({
+  queryMode,
+  setQueryMode,
+  retrievalMode,
+  setRetrievalMode,
+}) => {
   return (
     <ThreadPrimitive.Empty>
-      <div className="flex flex-grow gap-3 flex-col items-center justify-center">
-        <div className="flex items-center space-x-2">
-          <Switch
-            checked={queryMode === "site"}
-            onCheckedChange={(checked) =>
-              setQueryMode(checked ? "site" : "page")
-            }
-            id="query-mode"
-          />
-          <Label htmlFor="query-mode">Query Site</Label>
+      <div className="flex flex-grow gap-3 flex-col items-center justify-center max-w-80">
+        <div className="flex flex-col gap-3 items-start">
+          <div className="flex items-center space-x-2">
+            <Switch
+              checked={queryMode === "site"}
+              onCheckedChange={(checked) =>
+                setQueryMode(checked ? "site" : "page")
+              }
+              id="query-mode"
+            />
+            <Label htmlFor="query-mode">Query Site</Label>
+          </div>
+          <p className="text-muted-foreground text-pretty">
+            Filters indexed documents by base URL. If unchecked, will filter by
+            current page URL.
+          </p>
         </div>
-        <p className="text-muted-foreground w-2/3 text-pretty">
-          Filters indexed documents by base URL. If unchecked, will filter by
-          current page URL.
-        </p>
-        <div className="flex items-center space-x-2">
-          <Switch
-            checked={retrievalMode === "multi"}
-            onCheckedChange={(checked) =>
-              setRetrievalMode(checked ? "multi" : "base")
-            }
-            id="retrieval-mode"
-          />
-          <Label htmlFor="retrieval-mode">Multi-query mode</Label>
+
+        <div className="flex flex-col gap-3 items-start">
+          <div className="flex items-center space-x-2">
+            <Switch
+              checked={retrievalMode === "multi"}
+              onCheckedChange={(checked) =>
+                setRetrievalMode(checked ? "multi" : "base")
+              }
+              id="retrieval-mode"
+            />
+            <Label htmlFor="retrieval-mode">Multi-query mode</Label>
+          </div>
+          <p className="text-muted-foreground text-pretty">
+            Multi-query mode will generate multiple queries similar to your
+            input to be used for semantic search.
+          </p>
         </div>
-        <p className="text-muted-foreground w-2/3 text-pretty">
-          Multi-query mode will generate multiple queries similar to your input to be used for semantic search.
-        </p>
       </div>
     </ThreadPrimitive.Empty>
   );

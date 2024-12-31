@@ -20,3 +20,15 @@ export const getSystemPrompt = async () => {
   const { systemPrompt } = await chrome.storage.sync.get(["systemPrompt"]);
   return systemPrompt || DEFAULT_SYSTEM_PROMPT;
 };
+
+export const GENERATE_QUERIES_SYSTEM_MESSAGE = `You are a helpful research assistant whose task is to generate 3-5 semantically similar queries to the user's original question.
+Your queries should not be duplicated, or too semantically similar to the original question.
+You are generating these queries to be used for semantic search, so do not change the meaning of the queries, but rather generate new queries which are each semantically similar to the original question, but would result in different semantic search results.
+
+The user's query will be used to retrieve context from a website to help answer the query.
+With this in mind, ensure your generated queries are focused on the same topic as the user's query, but also different from each other as to result in unique semantic search results.`;
+
+export const GENERATE_QUERIES_USER_MESSAGE = `Here is the original query to base your newly generated queries off of:
+<original-query>
+{query}
+</original-query>`;

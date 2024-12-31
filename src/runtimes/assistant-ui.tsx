@@ -4,8 +4,8 @@ import {
   useLocalRuntime,
   type ChatModelAdapter,
 } from "@assistant-ui/react";
-import { queryModel } from "@/graphs/query";
 import { Model } from "@/types";
+import { queryModel } from "@/graphs/query/index";
 
 const ModelAdapter = (args: Record<string, any>): ChatModelAdapter => {
   return {
@@ -16,12 +16,12 @@ const ModelAdapter = (args: Record<string, any>): ChatModelAdapter => {
         currentUrl: args.currentUrl,
         queryMode: args.queryMode,
         model: args.model,
+        retrievalMode: args.retrievalMode,
       });
 
       let text = "";
       for await (const part of stream) {
         text += part.content;
-
         yield {
           content: [{ type: "text", text }],
         };
