@@ -5,12 +5,43 @@ import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase"
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import clearDocs from "@/lib/clear-docs";
+import { Document } from "@langchain/core/documents";
 
 interface IndexDataInput {
   url: string;
   mode: "scrape" | "crawl";
   allowBackwardLinks: boolean;
   clearExisting: boolean;
+}
+
+export async function scrape(
+  url: string,
+  options: {
+    mode?: "scrape" | "crawl";
+    allowBackwardLinks?: boolean;
+    fireCrawlApiKey: string;
+  },
+): Promise<Document[]> {
+  const client = new FireCrawlLoader({
+    url,
+    apiKey: options.fireCrawlApiKey,
+    mode: options.mode || "scrape",
+    params: {
+      ...(options.mode === "crawl"
+        ? { allowBackwardLinks: options.allowBackwardLinks || false }
+        : {}),
+    },
+  });
+
+  const docs = await client.load();
+  return docs.map((d) => ({
+    ...d,
+    id: uuidv4(),
+    metadata: {
+      ...d.metadata,
+      _indexed_at: new Date().toISOString(),
+    },
+  }));
 }
 
 export async function indexData({
@@ -47,24 +78,11 @@ export async function indexData({
     queryName: "match_documents",
   });
 
-  const client = new FireCrawlLoader({
-    url,
-    apiKey: fireCrawlApiKey,
+  const docs = await scrape(url, {
     mode,
-    params: {
-      ...(mode === "crawl" ? { allowBackwardLinks } : {}),
-    },
+    allowBackwardLinks,
+    fireCrawlApiKey,
   });
-
-  let docs = await client.load();
-  docs = docs.map((d) => ({
-    ...d,
-    id: uuidv4(),
-    metadata: {
-      ...d.metadata,
-      _indexed_at: new Date().toISOString(),
-    },
-  }));
 
   const splitter = new RecursiveCharacterTextSplitter({
     chunkSize: maxChunkSize,

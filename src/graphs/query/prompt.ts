@@ -21,6 +21,18 @@ export const getSystemPrompt = async () => {
   return systemPrompt || DEFAULT_SYSTEM_PROMPT;
 };
 
+export const setSystemPrompt = async (
+  systemPrompt: string,
+  options?: {
+    key?: string;
+  },
+) => {
+  const { key = "systemPrompt" } = options || {};
+  await chrome.storage.sync.set({
+    [key]: systemPrompt,
+  });
+};
+
 export const GENERATE_QUERIES_SYSTEM_MESSAGE = `You are a helpful research assistant whose task is to generate 3-5 semantically similar queries to the user's original question.
 Your queries should not be duplicated, or too semantically similar to the original question.
 You are generating these queries to be used for semantic search, so do not change the meaning of the queries, but rather generate new queries which are each semantically similar to the original question, but would result in different semantic search results.

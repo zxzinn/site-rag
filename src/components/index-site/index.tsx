@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { getLastIndexed } from "@/lib/last-indexed";
 import { indexData } from "@/graphs/_index";
-import { Button } from "../ui/button";
 import {
   IndexPageConfirmDialog,
   IndexSiteConfirmDialog,
@@ -52,14 +51,13 @@ export default function Index({ currentUrl }: IngestProps) {
         ) : (
           <p>No active tab</p>
         )}
-        {lastIndexed && numberDocsIndexed == null ? (
+        {lastIndexed && numberDocsIndexed == null && (
           <p>
             <span className="text-gray-600">Last indexed:</span>{" "}
             {format(new Date(lastIndexed), "MM/dd/yy HH:mm")}
           </p>
-        ) : (
-          <p>Site not indexed.</p>
         )}
+        {!lastIndexed && numberDocsIndexed == null && <p>Site not indexed.</p>}
         {numberDocsIndexed != null && (
           <p>Indexed {numberDocsIndexed} documents.</p>
         )}
