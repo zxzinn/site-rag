@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import {
   AssistantRuntimeProvider,
   useLocalRuntime,
@@ -17,6 +17,8 @@ const ModelAdapter = (args: Record<string, any>): ChatModelAdapter => {
         queryMode: args.queryMode,
         model: args.model,
         retrievalMode: args.retrievalMode,
+        contextStuff: args.contextStuff,
+        sessionId: args.sessionId,
       });
 
       let text = "";
@@ -32,26 +34,30 @@ const ModelAdapter = (args: Record<string, any>): ChatModelAdapter => {
 
 export function RuntimeProvider({
   children,
+  currentUrl,
   queryMode,
   model,
   retrievalMode,
+  contextStuff,
+  sessionId,
 }: Readonly<{
   children: ReactNode;
+  currentUrl: string;
   queryMode: "page" | "site";
   model: Model;
   retrievalMode: "base" | "multi";
+  contextStuff: boolean;
+  sessionId: string;
 }>) {
-  const [currentUrl, setCurrentUrl] = useState<string>("");
-
-  useEffect(() => {
-    chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
-      const url = tabs[0]?.url || "";
-      setCurrentUrl(url);
-    });
-  }, []);
-
   const runtime = useLocalRuntime(
-    ModelAdapter({ currentUrl, queryMode, model, retrievalMode }),
+    ModelAdapter({
+      currentUrl,
+      queryMode,
+      model,
+      retrievalMode,
+      contextStuff,
+      sessionId,
+    }),
   );
 
   return (

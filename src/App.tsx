@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { Settings } from "lucide-react";
 import SettingsForm from "./components/SettingsForm";
 import Index from "./components/index-site/index";
@@ -10,10 +11,12 @@ import ModelSelect from "./components/ModelSelect";
 
 const App: React.FC = () => {
   const [showSettings, setShowSettings] = useState(false);
-  const [currentUrl, setCurrentUrl] = useState<string>("");
-  const [queryMode, setQueryMode] = useState<"page" | "site">("site");
+  const [currentUrl, setCurrentUrl] = useState("");
+  const [queryMode, setQueryMode] = useState<"page" | "site">("page");
   const [model, setModel] = useState<Model>("gpt-4o");
   const [retrievalMode, setRetrievalMode] = useState<"base" | "multi">("base");
+  const [contextStuff, setContextStuff] = useState(true);
+  const [sessionId, setSessionId] = useState("");
 
   useEffect(() => {
     chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
@@ -22,15 +25,23 @@ const App: React.FC = () => {
     });
   }, []);
 
+  useEffect(() => {
+    if (!currentUrl) return;
+    setSessionId(uuidv4());
+  }, [currentUrl]);
+
   const toggleSettings = () => {
     setShowSettings(!showSettings);
   };
 
   return (
     <RuntimeProvider
+      currentUrl={currentUrl}
       queryMode={queryMode}
       model={model}
       retrievalMode={retrievalMode}
+      contextStuff={contextStuff}
+      sessionId={sessionId}
     >
       <div className="w-[700px] h-[600px] rounded-3xl p-4 bg-white">
         <div className="flex items-center justify-between mb-4">
@@ -57,6 +68,8 @@ const App: React.FC = () => {
             setQueryMode={setQueryMode}
             retrievalMode={retrievalMode}
             setRetrievalMode={setRetrievalMode}
+            contextStuff={contextStuff}
+            setContextStuff={setContextStuff}
           />
         )}
       </div>

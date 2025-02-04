@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Select,
   SelectContent,
@@ -11,6 +12,7 @@ import {
   ANTHROPIC_MODELS,
   OPENAI_MODELS,
   GOOGLE_GENAI_MODELS,
+  OLLAMA_MODELS,
 } from "@/constants";
 import { Model } from "@/types";
 
@@ -24,7 +26,7 @@ export default function ModelSelect({
   return (
     <Select value={model} onValueChange={(v) => setModel(v as Model)}>
       <SelectTrigger className="w-[180px]">
-        <SelectValue />
+        <SelectValue placeholder="Select a model" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
@@ -46,6 +48,14 @@ export default function ModelSelect({
         <SelectGroup>
           <SelectLabel>Google GenAI</SelectLabel>
           {GOOGLE_GENAI_MODELS.map((m) => (
+            <SelectItem key={m} value={m}>
+              {m}
+            </SelectItem>
+          ))}
+        </SelectGroup>
+        <SelectGroup>
+          <SelectLabel>Ollama</SelectLabel>
+          {OLLAMA_MODELS.map((m) => (
             <SelectItem key={m} value={m}>
               {m}
             </SelectItem>

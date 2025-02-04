@@ -30,6 +30,7 @@
     "@langchain/core": "^0.3.22",
     "@langchain/google-genai": "^0.1.6",
     "@langchain/langgraph": "^0.2.31",
+    "@langchain/ollama": "^0.1.4",
     "@langchain/openai": "^0.3.16",
     "@mendable/firecrawl-js": "^1.9.7",
     "@radix-ui/react-alert-dialog": "^1.1.4",
@@ -55,7 +56,7 @@
     "remark-math": "^6.0.0",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
-    "uuid": "^11.0.3",
+    "uuid": "^11.0.5",
     "zod": "^3.24.1"
   },
   "devDependencies": {

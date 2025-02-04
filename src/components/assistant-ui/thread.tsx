@@ -13,12 +13,15 @@ import { TooltipIconButton } from "@/components/assistant-ui/tooltip-icon-button
 import { MarkdownText } from "./markdown-text";
 import { Label } from "../ui/label";
 import { Switch } from "../ui/switch";
+import { Button } from "../ui/button";
 
 interface ThreadProps {
   queryMode: "page" | "site";
   setQueryMode: React.Dispatch<React.SetStateAction<"page" | "site">>;
   retrievalMode: "base" | "multi";
   setRetrievalMode: React.Dispatch<React.SetStateAction<"base" | "multi">>;
+  contextStuff: boolean;
+  setContextStuff: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const Thread: FC<ThreadProps> = ({
@@ -26,6 +29,8 @@ export const Thread: FC<ThreadProps> = ({
   setQueryMode,
   retrievalMode,
   setRetrievalMode,
+  contextStuff,
+  setContextStuff,
 }) => {
   return (
     <ThreadPrimitive.Root className="bg-background h-full">
@@ -35,6 +40,8 @@ export const Thread: FC<ThreadProps> = ({
           setQueryMode={setQueryMode}
           retrievalMode={retrievalMode}
           setRetrievalMode={setRetrievalMode}
+          contextStuff={contextStuff}
+          setContextStuff={setContextStuff}
         />
 
         <ThreadPrimitive.Messages
@@ -54,48 +61,107 @@ export const Thread: FC<ThreadProps> = ({
   );
 };
 
+function ContextStuff() {
+  return (
+    <div className="flex flex-col items-center justify-center gap-2">
+      <p className="text-lg font-medium">Context stuff</p>
+      <p>
+        This will scrape the current page and pass the entire contents of the
+        page to the LLM without storing it in the vector store.
+      </p>
+      <p>
+        Useful for one off questions where you know the answer is on the page
+        somewhere, but you don&apos;t want to read the entire page or persist
+        the context for later use.
+      </p>
+    </div>
+  );
+}
+
+function RetrievalMode({
+  queryMode,
+  setQueryMode,
+  retrievalMode,
+  setRetrievalMode,
+}: Pick<
+  ThreadProps,
+  "queryMode" | "setQueryMode" | "retrievalMode" | "setRetrievalMode"
+>) {
+  return (
+    <div className="flex flex-grow gap-3 flex-col items-center justify-center">
+      <div className="flex flex-col gap-3 items-start">
+        <div className="flex items-center space-x-2">
+          <Switch
+            checked={queryMode === "site"}
+            onCheckedChange={(checked) =>
+              setQueryMode(checked ? "site" : "page")
+            }
+            id="query-mode"
+          />
+          <Label htmlFor="query-mode">Query Site</Label>
+        </div>
+        <p className="text-muted-foreground text-pretty">
+          Filters indexed documents by base URL. If unchecked, will filter by
+          current page URL.
+        </p>
+      </div>
+
+      <div className="flex flex-col gap-3 items-start">
+        <div className="flex items-center space-x-2">
+          <Switch
+            checked={retrievalMode === "multi"}
+            onCheckedChange={(checked) =>
+              setRetrievalMode(checked ? "multi" : "base")
+            }
+            id="retrieval-mode"
+          />
+          <Label htmlFor="retrieval-mode">Multi-query mode</Label>
+        </div>
+        <p className="text-muted-foreground text-pretty">
+          Multi-query mode will generate multiple queries similar to your input
+          to be used for semantic search.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 const ThreadWelcome: FC<ThreadProps> = ({
   queryMode,
   setQueryMode,
   retrievalMode,
   setRetrievalMode,
+  contextStuff,
+  setContextStuff,
 }) => {
   return (
     <ThreadPrimitive.Empty>
       <div className="flex flex-grow gap-3 flex-col items-center justify-center max-w-80">
-        <div className="flex flex-col gap-3 items-start">
-          <div className="flex items-center space-x-2">
-            <Switch
-              checked={queryMode === "site"}
-              onCheckedChange={(checked) =>
-                setQueryMode(checked ? "site" : "page")
-              }
-              id="query-mode"
-            />
-            <Label htmlFor="query-mode">Query Site</Label>
-          </div>
-          <p className="text-muted-foreground text-pretty">
-            Filters indexed documents by base URL. If unchecked, will filter by
-            current page URL.
-          </p>
+        <div className="flex items-center justify-center">
+          <Button
+            variant={contextStuff ? "default" : "outline"}
+            onClick={() => setContextStuff(true)}
+            className="rounded-r-none"
+          >
+            Context Stuff
+          </Button>
+          <Button
+            variant={contextStuff ? "outline" : "default"}
+            onClick={() => setContextStuff(false)}
+            className="rounded-l-none"
+          >
+            Retrieval Mode
+          </Button>
         </div>
-
-        <div className="flex flex-col gap-3 items-start">
-          <div className="flex items-center space-x-2">
-            <Switch
-              checked={retrievalMode === "multi"}
-              onCheckedChange={(checked) =>
-                setRetrievalMode(checked ? "multi" : "base")
-              }
-              id="retrieval-mode"
-            />
-            <Label htmlFor="retrieval-mode">Multi-query mode</Label>
-          </div>
-          <p className="text-muted-foreground text-pretty">
-            Multi-query mode will generate multiple queries similar to your
-            input to be used for semantic search.
-          </p>
-        </div>
+        {contextStuff && <ContextStuff />}
+        {!contextStuff && (
+          <RetrievalMode
+            queryMode={queryMode}
+            setQueryMode={setQueryMode}
+            retrievalMode={retrievalMode}
+            setRetrievalMode={setRetrievalMode}
+          />
+        )}
       </div>
     </ThreadPrimitive.Empty>
   );
