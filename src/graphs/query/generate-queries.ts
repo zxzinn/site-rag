@@ -1,21 +1,22 @@
-import type { Model } from "@/types";
 import {
   GENERATE_QUERIES_SYSTEM_MESSAGE,
   GENERATE_QUERIES_USER_MESSAGE,
 } from "./prompt";
 import { getModelClass } from "./utils";
 import { z } from "zod";
+import { ALL_MODEL_NAMES } from "@/constants";
+import { getInitialMessageRole } from "@/lib/utils";
 
 /**
  * Generate semantically similar queries to the original query. Used in "multi-query" mode
  * to retrieve documents for context.
  * @param {string} query The base query to expand on
- * @param {Model} modelName The name of the model to use to generate the queries
+ * @param {ALL_MODEL_NAMES} modelName The name of the model to use to generate the queries
  * @returns {Promise<string[]>} A list of 3-5 semantically similar queries to the original query
  */
 export async function generateSearchQueries(
   query: string,
-  modelName: Model,
+  modelName: ALL_MODEL_NAMES,
 ): Promise<string[]> {
   const model = await getModelClass(modelName, {
     temperature: 1,
@@ -39,7 +40,7 @@ export async function generateSearchQueries(
   );
 
   const result = await modelWithStructuredOutput.invoke([
-    ["system", GENERATE_QUERIES_SYSTEM_MESSAGE],
+    [getInitialMessageRole(modelName), GENERATE_QUERIES_SYSTEM_MESSAGE],
     ["user", formattedUserMessage],
   ]);
 

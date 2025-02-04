@@ -4,8 +4,8 @@ import {
   useLocalRuntime,
   type ChatModelAdapter,
 } from "@assistant-ui/react";
-import { Model } from "@/types";
 import { queryModel } from "@/graphs/query/index";
+import { ALL_MODEL_NAMES } from "@/constants";
 
 const ModelAdapter = (args: Record<string, any>): ChatModelAdapter => {
   return {
@@ -44,7 +44,7 @@ export function RuntimeProvider({
   children: ReactNode;
   currentUrl: string;
   queryMode: "page" | "site";
-  model: Model;
+  model: ALL_MODEL_NAMES;
   retrievalMode: "base" | "multi";
   contextStuff: boolean;
   sessionId: string;

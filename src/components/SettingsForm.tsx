@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Input } from "./ui/input";
+import { Input, PasswordInput } from "./ui/input";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
@@ -23,6 +23,7 @@ interface Settings {
   ollamaApiUrl: string;
   ollamaEmbeddingsModel: string;
   ollamaLLMModel: string;
+  fireworksApiKey: string;
 }
 
 const DEFAULT_SETTINGS: Settings = {
@@ -39,6 +40,7 @@ const DEFAULT_SETTINGS: Settings = {
   ollamaApiUrl: "http://localhost:11434",
   ollamaEmbeddingsModel: "snowflake-arctic-embed:335m", // 1024 dim
   ollamaLLMModel: "llama3.1:8b",
+  fireworksApiKey: "",
 };
 
 const SettingsForm: React.FC<SettingsFormProps> = ({ onClose }) => {
@@ -61,6 +63,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ onClose }) => {
         "ollamaApiUrl",
         "ollamaEmbeddingsModel",
         "ollamaLLMModel",
+        "fireworksApiKey",
       ],
       (result) => {
         setSettings({
@@ -85,6 +88,8 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ onClose }) => {
             DEFAULT_SETTINGS.ollamaEmbeddingsModel,
           ollamaLLMModel:
             result.ollamaLLMModel || DEFAULT_SETTINGS.ollamaLLMModel,
+          fireworksApiKey:
+            result.fireworksApiKey || DEFAULT_SETTINGS.fireworksApiKey,
         });
       },
     );
@@ -121,22 +126,32 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ onClose }) => {
     <form onSubmit={handleSubmit} className="space-y-4">
       <p className="text-lg font-semibold">LLM API Keys</p>
 
-      <div className="w-full">
-        <Label>OpenAI API Key</Label>
-        <Input
-          type="text"
-          name="openaiApiKey"
-          value={settings.openaiApiKey}
-          onChange={handleChange}
-          className="w-full"
-        />
+      <div className="flex justify-between w-full gap-2">
+        <div className="w-full">
+          <Label>OpenAI API Key</Label>
+          <PasswordInput
+            name="openaiApiKey"
+            value={settings.openaiApiKey}
+            onChange={handleChange}
+            className="w-full"
+          />
+        </div>
+
+        <div className="w-full">
+          <Label>Anthropic API Key</Label>
+          <PasswordInput
+            name="anthropicApiKey"
+            value={settings.anthropicApiKey}
+            onChange={handleChange}
+            className="w-full"
+          />
+        </div>
       </div>
 
       <div className="flex justify-between w-full gap-2">
         <div className="w-full">
           <Label>Google GenAI API Key</Label>
-          <Input
-            type="text"
+          <PasswordInput
             name="googleGenAIApiKey"
             value={settings.googleGenAIApiKey}
             onChange={handleChange}
@@ -145,11 +160,10 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ onClose }) => {
         </div>
 
         <div className="w-full">
-          <Label>Anthropic API Key</Label>
-          <Input
-            type="text"
-            name="anthropicApiKey"
-            value={settings.anthropicApiKey}
+          <Label>Fireworks API Key</Label>
+          <PasswordInput
+            name="fireworksApiKey"
+            value={settings.fireworksApiKey}
             onChange={handleChange}
             className="w-full"
           />
@@ -162,8 +176,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ onClose }) => {
       <div className="flex justify-between w-full gap-2">
         <div className="w-full">
           <Label>Supabase URL</Label>
-          <Input
-            type="text"
+          <PasswordInput
             name="supabaseUrl"
             value={settings.supabaseUrl}
             onChange={handleChange}
@@ -172,8 +185,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ onClose }) => {
         </div>
         <div className="w-full">
           <Label>Supabase Private Key</Label>
-          <Input
-            type="text"
+          <PasswordInput
             name="supabasePrivateKey"
             value={settings.supabasePrivateKey}
             onChange={handleChange}
@@ -213,8 +225,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ onClose }) => {
 
       <div>
         <Label>FireCrawl API Key</Label>
-        <Input
-          type="text"
+        <PasswordInput
           name="fireCrawlApiKey"
           value={settings.fireCrawlApiKey}
           onChange={handleChange}
