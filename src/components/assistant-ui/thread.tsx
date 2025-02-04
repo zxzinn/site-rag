@@ -64,7 +64,7 @@ export const Thread: FC<ThreadProps> = ({
 function ContextStuff() {
   return (
     <div className="flex flex-col items-center justify-center gap-2">
-      <p className="text-lg font-medium">Context stuff</p>
+      <p className="text-lg font-medium">Context stuff mode</p>
       <p>
         This will scrape the current page and pass the entire contents of the
         page to the LLM without storing it in the vector store.

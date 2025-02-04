@@ -6,14 +6,14 @@ import Index from "./components/index-site/index";
 import { Button } from "./components/ui/button";
 import { RuntimeProvider } from "./runtimes/assistant-ui";
 import ChatView from "./components/ChatView";
-import { Model } from "./types";
-import ModelSelect from "./components/ModelSelect";
+import ModelSelector from "./components/model-selector";
+import { ALL_MODEL_NAMES } from "./constants";
 
 const App: React.FC = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [currentUrl, setCurrentUrl] = useState("");
   const [queryMode, setQueryMode] = useState<"page" | "site">("page");
-  const [model, setModel] = useState<Model>("gpt-4o");
+  const [model, setModel] = useState<ALL_MODEL_NAMES>("gpt-4o");
   const [retrievalMode, setRetrievalMode] = useState<"base" | "multi">("base");
   const [contextStuff, setContextStuff] = useState(true);
   const [sessionId, setSessionId] = useState("");
@@ -49,7 +49,7 @@ const App: React.FC = () => {
             Site<span className="font-extrabold text-red-600">RAG</span>
           </p>
           <div className="flex items-center gap-2">
-            <ModelSelect model={model} setModel={setModel} />
+            <ModelSelector modelName={model} setModelName={setModel} />
             <Button variant="ghost" onClick={toggleSettings}>
               <Settings size={24} />
             </Button>

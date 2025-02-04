@@ -1,6 +1,5 @@
 import { Document } from "@langchain/core/documents";
 import { createSupabaseClient } from "@/lib/supabase";
-import { Model } from "@/types";
 import { TextContentPart, ThreadMessage } from "@assistant-ui/react";
 import {
   SupabaseFilter,
@@ -13,13 +12,15 @@ import { getModelClass } from "./utils";
 import { generateSearchQueries } from "./generate-queries";
 import { scrape } from "../_index";
 import { getDataFromIndexedDB, storeDataInIndexedDB } from "@/lib/index-db";
+import { ALL_MODEL_NAMES } from "@/constants";
+import { getInitialMessageRole } from "@/lib/utils";
 
 interface QueryModelInput {
   messages: ThreadMessage[];
   abortSignal: AbortSignal;
   currentUrl: string;
   queryMode: "page" | "site";
-  model: Model;
+  model: ALL_MODEL_NAMES;
   retrievalMode: "base" | "multi";
   contextStuff: boolean;
   sessionId: string;
@@ -43,7 +44,7 @@ function getVectorStoreFilter(queryMode: "page" | "site", parsedUrl: URL) {
 interface ContextStuffQuery {
   currentUrl: string;
   messages: ThreadMessage[];
-  modelName: Model;
+  modelName: ALL_MODEL_NAMES;
   abortSignal?: AbortSignal;
 }
 
@@ -83,7 +84,7 @@ async function contextStuffQuery({
   }
 
   const input: BaseMessageLike[] = [
-    ["system", systemPrompt],
+    [getInitialMessageRole(modelName), systemPrompt],
     ...(messages.map((m) => [m.role, m.content]) as BaseMessageLike[]),
   ];
   const model = await getModelClass(modelName);
@@ -94,7 +95,7 @@ async function contextStuffQuery({
 
 interface MultiQueryRetrievalInput {
   recentContent: TextContentPart;
-  modelName: Model;
+  modelName: ALL_MODEL_NAMES;
   maxContextDocuments?: number;
   vectorStore: SupabaseVectorStore;
   filter: (rpcCall: SupabaseFilter) => SupabaseFilter;
@@ -155,7 +156,7 @@ async function multiQueryRetrieval({
 }
 
 interface RetrieveContextInput {
-  modelName: Model;
+  modelName: ALL_MODEL_NAMES;
   messages: ThreadMessage[];
   currentUrl: string;
   queryMode: "page" | "site";
@@ -254,6 +255,7 @@ async function storeDocs(args: StoreDocsArgs) {
  * @param messages - Array of thread messages to be formatted
  * @param existingRelevantDocs - Storage object containing relevant documents mapped to message indices
  * @param formattedSystemPrompt - System prompt to be included at the start of the message array
+ * @param modelName - The name of the model to use
  * @returns An array of BaseMessageLike tuples, each containing a role and content
  * @throws Logs an error if no relevant document is found for a message index
  */
@@ -261,9 +263,10 @@ function formatMessages(
   messages: ThreadMessage[],
   existingRelevantDocs: RelevantDocsStorage,
   formattedSystemPrompt: string,
+  modelName: ALL_MODEL_NAMES,
 ): BaseMessageLike[] {
   const formattedMessages: BaseMessageLike[] = [
-    ["system", formattedSystemPrompt],
+    [getInitialMessageRole(modelName), formattedSystemPrompt],
   ];
   if (messages.length === 1) {
     // Only 1 message means the context is already included in the system prompt
@@ -340,6 +343,7 @@ export async function queryModel({
     messages,
     existingRelevantDocs,
     formattedSystemPrompt,
+    modelName,
   );
 
   const model = await getModelClass(modelName);

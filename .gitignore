@@ -20,3 +20,5 @@ yarn-error.log
 
 # Screenshots taken during tests
 src/tests/data/screenshots/
+.DS_Store
+*.zip
