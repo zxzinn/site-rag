@@ -10,8 +10,9 @@ import { ALL_MODEL_NAMES } from "@/constants";
 const ModelAdapter = (args: Record<string, any>): ChatModelAdapter => {
   return {
     async *run({ messages, abortSignal }) {
+      const messagesCopy = [...messages];
       const stream = await queryModel({
-        messages,
+        messages: messagesCopy,
         abortSignal,
         currentUrl: args.currentUrl,
         queryMode: args.queryMode,

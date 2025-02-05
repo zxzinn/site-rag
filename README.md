@@ -2,17 +2,33 @@
 
 [Demo video](https://www.loom.com/share/2ee8496a17774577b2684d6b2981bd1a)
 
-![Screenshot of Site RAG Chrome extension](./public/screenshot.png)
+<p align="center">
+  <img src="./static/screenshot_context_stuff.png" width="45%" alt="Context Mode Screenshot" />
+  <img src="./static/screenshot_retrieval_mode.png" width="45%" alt="Retrieval Mode Screenshot" />
+</p>
 
-A Chrome extension for asking questions over websites. Site RAG can index a single page of the website, or crawl the entire site. It then generates embeddings for the indexed documents, and stores them in a vector store database.
+A Chrome extension for asking questions over websites. Site RAG can:
 
-When a user asks a question, Site RAG will either fetch relevant documents from the current page, or the entire site (customizable).
+- Preform one off queries on the current page
+- Index the current page & persist the documents in a vector store. Then preform RAG when generating a response
+- Index an entire site & persist the documents in a vector store. Then preform RAG when generating a response
+
+Site RAG runs 100% locally in your browser, storing all secrets in browser storage.
+
+You can even connect a locally running Ollama instance to use local LLM inference with Site RAG.
 
 ## Requirements
 
-- [Anthropic API key](https://console.anthropic.com/) - For LLM chat generations
-- [OpenAI API key](https://platform.openai.com/) - For embeddings
-- [Supabase account](https://supabase.com/) - For vector store
+For the quickstart (no RAG, only context stuffing) you only need _one_ of the following API keys:
+
+- [Anthropic](https://console.anthropic.com/)
+- [OpenAI](https://platform.openai.com/)
+- [Google GenAI](https://aistudio.google.com/)
+- [Together AI](https://api.together.ai/)
+
+And a FireCrawl API key for scraping sites:
+
+- [FireCrawl](https://firecrawl.dev/)
 
 ## Setup
 
@@ -38,9 +54,23 @@ and build:
 yarn build
 ```
 
-### Vector store
+## Usage
 
-To setup the vector store, you need to create a Supabase database. Then, inside the SQL editor, run the following:
+Once built, go to [chrome://extensions/](chrome://extensions/) and click "Load unpacked". From there, select the `dist` directory of this repository.
+
+Once loaded, open the extension and visit the settings page. Here you can add your API keys, secrets, and other configuration. Once set, scroll to the bottom and click `Save`.
+
+Then, return to the chat view and ask your first question!
+
+This will scrape the site you currently have the extension opened on, and use that context to answer your question.
+
+## Advanced Setup
+
+Site RAG also allows for integrating a vector store to persist your indexed documents. To do this, you need to create a Supabase database.
+
+Sign up for a free Supabase account [here](http://supabase.com/).
+
+Next, create a new project and execute this PostgreSQL command to create the necessary table and functions:
 
 ```sql
 -- Enable the pgvector extension to work with embedding vectors
@@ -86,8 +116,22 @@ $$;
 
 ```
 
-## Usage
+After setting up the vector store, you can add your credentials to the settings page of the extension.
 
-To use the extension, go to [chrome://extensions/](chrome://extensions/) and click "Load unpacked". From there, select the `dist` directory of this repository.
+## FAQ
 
-Once loaded, open the extension and visit the settings page. Here you can add your API keys, and Supabase credentials. You can also customize the indexing settings, such as chunk size and overlap.
+#### What happens if I index the same site twice?
+
+Site RAG will ask you if you want to delete existing documents before indexing again, so you don't have to worry about duplicates. It deletes documents by URL.
+
+#### What is "multi query mode"?
+
+Multi query mode will generate multiple queries based on your input message, then preform a semantic search on each generated query. Finally, using all of the results, it will remove duplicates and generate a final response.
+
+#### How does retrieval work in followup questions?
+
+Site RAG preforms retrieval (if you aren't using context stuffing mode) on each request by you. Once documents are retrieved, they are stored in your browser's storage with a `sessionID` tying them to your current chat session. Then, in followup questions the context from the most recent question will be included in the system prompt, and previous context will be passed as `user` messages before each of your previous requests, so the model always has the full context.
+
+#### How does context stuff work?
+
+Context stuff mode will scrape the current page, then store those results in your browser's storage. Then, each time you send a request using context stuffing mode, it will include the entire contents of the page in the system prompt.

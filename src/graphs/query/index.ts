@@ -270,7 +270,10 @@ function formatMessages(
   ];
   if (messages.length === 1) {
     // Only 1 message means the context is already included in the system prompt
-    return [...formattedMessages, ["user", messages[0].content]];
+    return [
+      ...formattedMessages,
+      ["user", messages[0].content],
+    ] as BaseMessageLike[];
   }
 
   messages.forEach((message, index) => {
@@ -290,7 +293,7 @@ function formatMessages(
         `Use this context to answer the following question\n<context>\n${relevantDoc.docs}\n</context>`,
       ]);
     }
-    formattedMessages.push([message.role, message.content]);
+    formattedMessages.push([message.role, message.content] as BaseMessageLike);
   });
 
   return formattedMessages;

@@ -7,7 +7,6 @@ import {
 } from "@assistant-ui/react";
 import type { FC } from "react";
 import { SendHorizontalIcon } from "lucide-react";
-
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { TooltipIconButton } from "@/components/assistant-ui/tooltip-icon-button";
 import { MarkdownText } from "./markdown-text";
@@ -53,7 +52,7 @@ export const Thread: FC<ThreadProps> = ({
 
         <div className="min-h-8 flex-grow" />
 
-        <div className="sticky bottom-0 mt-3 flex w-full max-w-xl flex-col items-center justify-end rounded-t-lg bg-inherit pb-4">
+        <div className="sticky bottom-0 mt-3 flex w-full max-w-xl flex-row items-center justify-end rounded-t-lg bg-inherit pb-4">
           <Composer />
         </div>
       </ThreadPrimitive.Viewport>
@@ -169,7 +168,7 @@ const ThreadWelcome: FC<ThreadProps> = ({
 
 const Composer: FC = () => {
   return (
-    <ComposerPrimitive.Root className="focus-within:border-aui-ring/20 flex w-full flex-wrap items-end rounded-lg border bg-inherit px-2.5 shadow-sm transition-colors ease-in">
+    <ComposerPrimitive.Root className="focus-within:border-aui-ring/20 flex w-full flex-row items-end rounded-lg border bg-inherit px-2.5 shadow-sm transition-colors ease-in">
       <ComposerPrimitive.Input
         autoFocus
         placeholder="Write a message..."
