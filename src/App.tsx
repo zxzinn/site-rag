@@ -24,10 +24,9 @@ function Header({
 }) {
   const assistantRuntime = useAssistantRuntime();
 
-  const handleNewChat = () => {
+  const handleNewChat = async () => {
     setSessionId(uuidv4());
-    assistantRuntime.switchToNewThread();
-    // assistantRuntime.threads.delete(assistantRuntime.threads.getState().mainThreadId);
+    await assistantRuntime.threads.mainItem.delete();
   };
 
   return (
