@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@ai-sdk/provider@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@ai-sdk/provider/-/provider-1.0.3.tgz#cfc75e2d3932133712583c55992f4b209f8a5e77"
-  integrity sha512-WiuJEpHTrltOIzv3x2wx4gwksAHW0h6nK3SoDzjqCOJLu/2OJ1yASESTIX+f07ChFykHElVoP80Ol/fe9dw6tQ==
+"@ai-sdk/provider@^1.0.4":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@ai-sdk/provider/-/provider-1.0.7.tgz#66e07407678153b514aebf3f1c3c035e5e833380"
+  integrity sha512-q1PJEZ0qD9rVR+8JFEd01/QM++csMT5UVwYXSN2u54BrVw/D8TZLTeg2FEfKK00DgAx0UtWd8XOhhwITP9BT5g==
   dependencies:
     json-schema "^0.4.0"
 
@@ -52,12 +52,12 @@
   resolved "https://registry.yarnpkg.com/@assistant-ui/react-syntax-highlighter/-/react-syntax-highlighter-0.7.5.tgz#a4f209ed118e44b99491daa957878536842dffdb"
   integrity sha512-RwQE1NqNdE/DmOmEDQ57as2ucz4smx3qJNnMQh9VR4cuTjwRmNL6WbGdioPBFFhnpL2UAbnYBw7z/1pApzOMKw==
 
-"@assistant-ui/react@^0.7.17":
-  version "0.7.21"
-  resolved "https://registry.yarnpkg.com/@assistant-ui/react/-/react-0.7.21.tgz#fe964d465515025908a17d4ced734adbec41edb9"
-  integrity sha512-RVkY2UOlmIhCBUkBGWxPrUHVQLbsAMQM45gKxqtxVwTREwoLQyYPCayWy10adDfnlNgPFgyTtp/8EtC74n6i5Q==
+"@assistant-ui/react@^0.7.68":
+  version "0.7.68"
+  resolved "https://registry.yarnpkg.com/@assistant-ui/react/-/react-0.7.68.tgz#aeec434a12936cb57b7d1ac510ea733b973c5242"
+  integrity sha512-qqSs54ueaXbJkRiqMuEb2Mmgbdx2/MebuJiHlMC/FseNtrGHOabM1GxuOx/uFHinMS64BBHDmesoRbLkrAGlFQ==
   dependencies:
-    "@ai-sdk/provider" "^1.0.3"
+    "@ai-sdk/provider" "^1.0.4"
     "@radix-ui/primitive" "^1.1.1"
     "@radix-ui/react-avatar" "^1.1.2"
     "@radix-ui/react-compose-refs" "^1.1.1"
@@ -69,16 +69,17 @@
     "@radix-ui/react-tooltip" "^1.1.6"
     "@radix-ui/react-use-callback-ref" "^1.1.0"
     "@radix-ui/react-use-escape-keydown" "^1.1.0"
+    assistant-stream "^0.0.18"
     class-variance-authority "^0.7.1"
     classnames "^2.5.1"
     json-schema "^0.4.0"
-    lucide-react "^0.469.0"
+    lucide-react "^0.473.0"
     nanoid "^5.0.9"
-    react-textarea-autosize "^8.5.6"
-    secure-json-parse "^3.0.1"
+    react-textarea-autosize "^8.5.7"
+    secure-json-parse "^3.0.2"
     zod "^3.24.1"
     zod-to-json-schema "^3.24.1"
-    zustand "^5.0.2"
+    zustand "^5.0.3"
 
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.12.13", "@babel/code-frame@^7.25.9", "@babel/code-frame@^7.26.0", "@babel/code-frame@^7.26.2":
   version "7.26.2"
@@ -2202,6 +2203,14 @@ arraybuffer.prototype.slice@^1.0.4:
     es-errors "^1.3.0"
     get-intrinsic "^1.2.6"
     is-array-buffer "^3.0.4"
+
+assistant-stream@^0.0.18:
+  version "0.0.18"
+  resolved "https://registry.yarnpkg.com/assistant-stream/-/assistant-stream-0.0.18.tgz#10df600bedea0d5b7a217a283f390e22ab3fd29b"
+  integrity sha512-svpg+eDdZAzNc2/SDNWTNRsFGSQDL1ShgK9u0lkn63/sKab+hq913Uq1FZU4XNgd0G3U9vbhGYyGv/ioM06VuQ==
+  dependencies:
+    nanoid "^5.0.9"
+    secure-json-parse "^3.0.2"
 
 async@^3.2.3:
   version "3.2.6"
@@ -4742,6 +4751,11 @@ lucide-react@^0.469.0:
   resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-0.469.0.tgz#f16936ca6521482fef754a7eabb310e6c68e1482"
   integrity sha512-28vvUnnKQ/dBwiCQtwJw7QauYnE7yd2Cyp4tTTJpvglX4EMpbflcdBgrgToX2j71B3YvugK/NH3BGUk+E/p/Fw==
 
+lucide-react@^0.473.0:
+  version "0.473.0"
+  resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-0.473.0.tgz#f01dcde458e55bce766a282f4f5894970a9f24ac"
+  integrity sha512-KW6u5AKeIjkvrxXZ6WuCu9zHE/gEYSXCay+Gre2ZoInD0Je/e3RBtP4OHpJVJ40nDklSvjVKjgH7VU8/e2dzRw==
+
 make-dir@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/make-dir/-/make-dir-4.0.0.tgz#c3c2307a771277cd9638305f915c29ae741b614e"
@@ -5974,10 +5988,10 @@ react-syntax-highlighter@^15.6.1:
     prismjs "^1.27.0"
     refractor "^3.6.0"
 
-react-textarea-autosize@^8.5.6:
-  version "8.5.6"
-  resolved "https://registry.yarnpkg.com/react-textarea-autosize/-/react-textarea-autosize-8.5.6.tgz#e9205fb215eea7cbb6cba8f57dd874ab5d44a241"
-  integrity sha512-aT3ioKXMa8f6zHYGebhbdMD2L00tKeRX1zuVuDx9YQK/JLLRSaSxq3ugECEmUB9z2kvk6bFSIoRHLkkUv0RJiw==
+react-textarea-autosize@^8.5.7:
+  version "8.5.7"
+  resolved "https://registry.yarnpkg.com/react-textarea-autosize/-/react-textarea-autosize-8.5.7.tgz#b2bf1913383a05ffef7fbc89c2ea21ba8133b023"
+  integrity sha512-2MqJ3p0Jh69yt9ktFIaZmORHXw4c4bxSIhCeWiFwmJ9EYKgLmuNII3e9c9b2UO+ijl4StnpZdqpxNIhTdHvqtQ==
   dependencies:
     "@babel/runtime" "^7.20.13"
     use-composed-ref "^1.3.0"
@@ -6230,10 +6244,10 @@ scheduler@^0.23.2:
   dependencies:
     loose-envify "^1.1.0"
 
-secure-json-parse@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/secure-json-parse/-/secure-json-parse-3.0.1.tgz#78987844ea1f0cfe9c5f9f723cdf031f542e7b5f"
-  integrity sha512-9QR7G96th4QJ2+dJwvZB+JoXyt8PN+DbEjOr6kL2/JU4KH8Eb2sFdU+gt8EDdzWDWoWH0uocDdfCoFzdVSixUA==
+secure-json-parse@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/secure-json-parse/-/secure-json-parse-3.0.2.tgz#255b03bb0627ba5805f64f384b0a7691d8cb021b"
+  integrity sha512-H6nS2o8bWfpFEV6U38sOSjS7bTbdgbCGU9wEM6W14P5H0QOsz94KCusifV44GpHDTu2nqZbuDNhTzu+mjDSw1w==
 
 semver@^6.3.0, semver@^6.3.1:
   version "6.3.1"
@@ -7119,10 +7133,10 @@ zod@^3.22.3, zod@^3.22.4, zod@^3.23.8, zod@^3.24.1:
   resolved "https://registry.yarnpkg.com/zod/-/zod-3.24.1.tgz#27445c912738c8ad1e9de1bea0359fa44d9d35ee"
   integrity sha512-muH7gBL9sI1nciMZV67X5fTKKBLtwpZ5VBp1vsOQzj1MhrBZ4wlVCm3gedKZWLp0Oyel8sIGfeiz54Su+OVT+A==
 
-zustand@^5.0.2:
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/zustand/-/zustand-5.0.2.tgz#f7595ada55a565f1fd6464f002a91e701ee0cfca"
-  integrity sha512-8qNdnJVJlHlrKXi50LDqqUNmUbuBjoKLrYQBnoChIbVph7vni+sY+YpvdjXG9YLd/Bxr6scMcR+rm5H3aSqPaw==
+zustand@^5.0.3:
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/zustand/-/zustand-5.0.3.tgz#b323435b73d06b2512e93c77239634374b0e407f"
+  integrity sha512-14fwWQtU3pH4dE0dOpdMiWjddcH+QzKIgk1cl8epwSE7yag43k/AD/m4L6+K7DytAOr9gGBe3/EXj9g7cdostg==
 
 zwitch@^2.0.0:
   version "2.0.4"

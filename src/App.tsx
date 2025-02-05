@@ -27,6 +27,7 @@ function Header({
   const handleNewChat = () => {
     setSessionId(uuidv4());
     assistantRuntime.switchToNewThread();
+    // assistantRuntime.threads.delete(assistantRuntime.threads.getState().mainThreadId);
   };
 
   return (
