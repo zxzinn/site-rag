@@ -135,3 +135,11 @@ Site RAG preforms retrieval (if you aren't using context stuffing mode) on each 
 #### How does context stuff work?
 
 Context stuff mode will scrape the current page, then store those results in your browser's storage. Then, each time you send a request using context stuffing mode, it will include the entire contents of the page in the system prompt.
+
+## How to add new LLMs
+
+If you want to use additional LLMs which are not included in the default model list, you'll need to update a few things:
+
+1. Navigate to [`constants.ts`](src/constants.ts) and either add the new model ID and name to an existing provider list, or create a new provider list.
+2. If adding a new provider list, ensure you add the proper types for that list below, and include them in the `ALL_MODELS` array, and `ALL_MODEL_NAMES` type.
+3. The last step is to update the `MODEL_NAME_PROVIDER_MAP` by adding the new model ID, and provider name to the map. The provider name must be a valid provider which is accepted by `initChatModel`. See docs on `initChatModel` for more info [here](https://v03.api.js.langchain.com/functions/langchain.chat_models_universal.initChatModel.html#Param:%20fields.modelProvider).
