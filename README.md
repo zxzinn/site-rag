@@ -58,11 +58,11 @@ yarn build
 
 Once built, go to [chrome://extensions/](chrome://extensions/) and click "Load unpacked". From there, select the `dist` directory of this repository.
 
-Once loaded, open the extension and visit the settings page. Here you can add your API key. Once added, scroll to the bottom and click save.
+Once loaded, open the extension and visit the settings page. Here you can add your API keys, secrets, and other configuration. Once set, scroll to the bottom and click `Save`.
 
 Then, return to the chat view and ask your first question!
 
-This will scrape the site you opened the extension on, and use that context to answer your question.
+This will scrape the site you currently have the extension opened on, and use that context to answer your question.
 
 ## Advanced Setup
 
