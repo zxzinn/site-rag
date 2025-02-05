@@ -1,6 +1,6 @@
 # Site RAG
 
-[Demo video](https://www.loom.com/share/2ee8496a17774577b2684d6b2981bd1a)
+[Demo video](https://youtu.be/Af0Dz9bxcWY)
 
 <p align="center">
   <img src="./static/screenshot_context_stuff.png" width="45%" alt="Context Mode Screenshot" />
