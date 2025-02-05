@@ -17,6 +17,15 @@ Site RAG runs 100% locally in your browser, storing all secrets in browser stora
 
 You can even connect a locally running Ollama instance to use local LLM inference with Site RAG.
 
+## Table of contents
+
+- [Requirements](#requirements)
+- [Setup](#setup)
+- [Usage](#usage)
+- [Advanced Setup](#advanced-setup)
+- [FAQ](#faq)
+- [How to add new LLMs](#how-to-add-new-llms)
+
 ## Requirements
 
 For the quickstart (no RAG, only context stuffing) you only need _one_ of the following API keys:
