@@ -10,7 +10,7 @@ import {
   ALL_MODEL_NAMES,
   ALL_MODELS,
   ANTHROPIC_MODELS,
-  FIREWORKS_MODELS,
+  TOGETHER_MODELS,
   GEMINI_MODELS,
   OLLAMA_MODELS,
   OPENAI_MODELS,
@@ -128,8 +128,8 @@ export default function ModelSelector({
               })}
             </CommandGroup>
 
-            <CommandGroup heading="Fireworks" className="w-full">
-              {FIREWORKS_MODELS.map((model) => {
+            <CommandGroup heading="Together AI" className="w-full">
+              {TOGETHER_MODELS.map((model) => {
                 return (
                   <CommandModelItem
                     key={model.name}

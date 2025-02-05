@@ -44,18 +44,18 @@ export const ANTHROPIC_MODELS = [
   },
 ];
 
-export const FIREWORKS_MODELS: ModelConfigurationParams[] = [
+export const TOGETHER_MODELS: ModelConfigurationParams[] = [
   {
-    name: "accounts/fireworks/models/llama-v3p3-70b-instruct",
-    label: "Llama 3.3 70B",
+    name: "deepseek-ai/DeepSeek-R1",
+    label: "DeepSeek R1",
   },
   {
-    name: "accounts/fireworks/models/deepseek-v3",
+    name: "deepseek-ai/DeepSeek-V3",
     label: "DeepSeek V3",
   },
   {
-    name: "accounts/fireworks/models/deepseek-r1",
-    label: "DeepSeek R1",
+    name: "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+    label: "Llama 3.3 70B Turbo",
   },
 ];
 
@@ -73,19 +73,19 @@ export const GEMINI_MODELS: ModelConfigurationParams[] = [
 export const ALL_MODELS: ModelConfigurationParams[] = [
   ...OPENAI_MODELS,
   ...ANTHROPIC_MODELS,
-  ...FIREWORKS_MODELS,
+  ...TOGETHER_MODELS,
   ...GEMINI_MODELS,
   ...OLLAMA_MODELS,
 ];
 
 export type OPENAI_MODEL_NAMES = (typeof OPENAI_MODELS)[number]["name"];
 export type ANTHROPIC_MODEL_NAMES = (typeof ANTHROPIC_MODELS)[number]["name"];
-export type FIREWORKS_MODEL_NAMES = (typeof FIREWORKS_MODELS)[number]["name"];
+export type TOGETHER_MODEL_NAMES = (typeof TOGETHER_MODELS)[number]["name"];
 export type GEMINI_MODEL_NAMES = (typeof GEMINI_MODELS)[number]["name"];
 export type OLLAMA_MODEL_NAMES = (typeof OLLAMA_MODELS)[number]["name"];
 export type ALL_MODEL_NAMES =
   | OPENAI_MODEL_NAMES
   | ANTHROPIC_MODEL_NAMES
-  | FIREWORKS_MODEL_NAMES
+  | TOGETHER_MODEL_NAMES
   | GEMINI_MODEL_NAMES
   | OLLAMA_MODEL_NAMES;

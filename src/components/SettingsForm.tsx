@@ -23,7 +23,7 @@ interface Settings {
   ollamaApiUrl: string;
   ollamaEmbeddingsModel: string;
   ollamaLLMModel: string;
-  fireworksApiKey: string;
+  togetherApiKey: string;
 }
 
 const DEFAULT_SETTINGS: Settings = {
@@ -40,7 +40,7 @@ const DEFAULT_SETTINGS: Settings = {
   ollamaApiUrl: "http://localhost:11434",
   ollamaEmbeddingsModel: "snowflake-arctic-embed:335m", // 1024 dim
   ollamaLLMModel: "llama3.1:8b",
-  fireworksApiKey: "",
+  togetherApiKey: "",
 };
 
 const SettingsForm: React.FC<SettingsFormProps> = ({ onClose }) => {
@@ -63,7 +63,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ onClose }) => {
         "ollamaApiUrl",
         "ollamaEmbeddingsModel",
         "ollamaLLMModel",
-        "fireworksApiKey",
+        "togetherApiKey",
       ],
       (result) => {
         setSettings({
@@ -88,8 +88,8 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ onClose }) => {
             DEFAULT_SETTINGS.ollamaEmbeddingsModel,
           ollamaLLMModel:
             result.ollamaLLMModel || DEFAULT_SETTINGS.ollamaLLMModel,
-          fireworksApiKey:
-            result.fireworksApiKey || DEFAULT_SETTINGS.fireworksApiKey,
+          togetherApiKey:
+            result.togetherApiKey || DEFAULT_SETTINGS.togetherApiKey,
         });
       },
     );
@@ -160,10 +160,10 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ onClose }) => {
         </div>
 
         <div className="w-full">
-          <Label>Fireworks API Key</Label>
+          <Label>Together API Key</Label>
           <PasswordInput
-            name="fireworksApiKey"
-            value={settings.fireworksApiKey}
+            name="togetherApiKey"
+            value={settings.togetherApiKey}
             onChange={handleChange}
             className="w-full"
           />
