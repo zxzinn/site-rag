@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { Settings } from "lucide-react";
+import { Settings, SquarePen } from "lucide-react";
 import SettingsForm from "./components/SettingsForm";
 import Index from "./components/index-site/index";
 import { Button } from "./components/ui/button";
@@ -8,6 +8,49 @@ import { RuntimeProvider } from "./runtimes/assistant-ui";
 import ChatView from "./components/ChatView";
 import ModelSelector from "./components/model-selector";
 import { ALL_MODEL_NAMES } from "./constants";
+import { TooltipIconButton } from "./components/assistant-ui/tooltip-icon-button";
+import { useAssistantRuntime } from "@assistant-ui/react";
+
+function Header({
+  model,
+  setModel,
+  toggleSettings,
+  setSessionId,
+}: {
+  model: ALL_MODEL_NAMES;
+  setModel: (model: ALL_MODEL_NAMES) => void;
+  toggleSettings: () => void;
+  setSessionId: React.Dispatch<React.SetStateAction<string>>;
+}) {
+  const assistantRuntime = useAssistantRuntime();
+
+  const handleNewChat = () => {
+    setSessionId(uuidv4());
+    assistantRuntime.switchToNewThread();
+  };
+
+  return (
+    <div className="flex items-center justify-between mb-4">
+      <p className="text-2xl font-semibold text-black tracking-tighter">
+        Site<span className="font-extrabold text-red-600">RAG</span>
+      </p>
+      <div className="flex items-center gap-2">
+        <ModelSelector modelName={model} setModelName={setModel} />
+        <Button variant="ghost" onClick={toggleSettings}>
+          <Settings size={24} />
+        </Button>
+        <TooltipIconButton
+          tooltip="New chat"
+          variant="ghost"
+          onClick={handleNewChat}
+          className="p-2"
+        >
+          <SquarePen size={24} />
+        </TooltipIconButton>
+      </div>
+    </div>
+  );
+}
 
 const App: React.FC = () => {
   const [showSettings, setShowSettings] = useState(false);
@@ -44,17 +87,12 @@ const App: React.FC = () => {
       sessionId={sessionId}
     >
       <div className="w-[700px] h-[600px] rounded-3xl p-4 bg-white">
-        <div className="flex items-center justify-between mb-4">
-          <p className="text-2xl font-semibold text-black tracking-tighter">
-            Site<span className="font-extrabold text-red-600">RAG</span>
-          </p>
-          <div className="flex items-center gap-2">
-            <ModelSelector modelName={model} setModelName={setModel} />
-            <Button variant="ghost" onClick={toggleSettings}>
-              <Settings size={24} />
-            </Button>
-          </div>
-        </div>
+        <Header
+          model={model}
+          setModel={setModel}
+          toggleSettings={toggleSettings}
+          setSessionId={setSessionId}
+        />
 
         <div className="mb-3">
           <Index currentUrl={currentUrl} />
