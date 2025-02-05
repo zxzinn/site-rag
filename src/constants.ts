@@ -89,3 +89,24 @@ export type ALL_MODEL_NAMES =
   | TOGETHER_MODEL_NAMES
   | GEMINI_MODEL_NAMES
   | OLLAMA_MODEL_NAMES;
+
+export const MODEL_NAME_PROVIDER_MAP: Record<ALL_MODEL_NAMES, string> = {
+  // OpenAI models
+  "gpt-4o": "openai",
+  "gpt-4o-mini": "openai",
+  "o3-mini": "openai",
+  "o1-mini": "openai",
+  o1: "openai",
+  // Ollama models
+  "ollama-llama3.3": "ollama",
+  // Anthropic models
+  "claude-3-5-sonnet-latest": "anthropic",
+  "claude-3-5-haiku-20241022": "anthropic",
+  // Together models
+  "meta-llama/Llama-3.3-70B-Instruct-Turbo": "together",
+  "deepseek-ai/DeepSeek-V3": "together",
+  "deepseek-ai/DeepSeek-R1": "together",
+  // Gemini models
+  "gemini-2.0-flash-exp": "google-genai",
+  "gemini-2.0-flash-thinking-exp-01-21": "google-genai",
+};
