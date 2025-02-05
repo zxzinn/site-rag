@@ -19,7 +19,7 @@ You can even connect a locally running Ollama instance to use local LLM inferenc
 
 ## Requirements
 
-For the quickstart (no RAG, only context stuffing) you only need one of the following API keys:
+For the quickstart (no RAG, only context stuffing) you only need _one_ of the following API keys:
 
 - [Anthropic](https://console.anthropic.com/)
 - [OpenAI](https://platform.openai.com/)
