@@ -13,10 +13,10 @@ const modelNameToProviderMap: Record<ALL_MODEL_NAMES, string> = {
   // Anthropic models
   "claude-3-5-sonnet-latest": "anthropic",
   "claude-3-5-haiku-20241022": "anthropic",
-  // Fireworks models
-  "accounts/fireworks/models/llama-v3p3-70b-instruct": "fireworks",
-  "accounts/fireworks/models/deepseek-v3": "fireworks",
-  "accounts/fireworks/models/deepseek-r1": "fireworks",
+  // Together models
+  "meta-llama/Llama-3.3-70B-Instruct-Turbo": "together",
+  "deepseek-ai/DeepSeek-V3": "together",
+  "deepseek-ai/DeepSeek-R1": "together",
   // Gemini models
   "gemini-2.0-flash-exp": "google-genai",
   "gemini-2.0-flash-thinking-exp-01-21": "google-genai",
@@ -33,12 +33,12 @@ export async function getModelClass(
     throw new Error(`Unknown model: ${model}`);
   }
 
-  const { anthropicApiKey, openaiApiKey, googleGenAIApiKey, fireworksApiKey } =
+  const { anthropicApiKey, openaiApiKey, googleGenAIApiKey, togetherApiKey } =
     await chrome.storage.sync.get([
       "anthropicApiKey",
       "openaiApiKey",
       "googleGenAIApiKey",
-      "fireworksApiKey",
+      "togetherApiKey",
     ]);
 
   let apiKey = "";
@@ -48,8 +48,8 @@ export async function getModelClass(
     apiKey = openaiApiKey;
   } else if (provider === "google-genai") {
     apiKey = googleGenAIApiKey;
-  } else if (provider === "fireworks") {
-    apiKey = fireworksApiKey;
+  } else if (provider === "together") {
+    apiKey = togetherApiKey;
   } else if (provider === "ollama") {
     // Ollama is local, no API key needed
     apiKey = "";
@@ -59,9 +59,11 @@ export async function getModelClass(
     model.startsWith("o1") || model.startsWith("o3")
   );
 
-  return initChatModel(model, {
+  const initChatModelArgs = {
     modelProvider: provider,
     ...(supportsTemperature ? { temperature: options?.temperature ?? 0 } : {}),
     ...(apiKey ? { apiKey } : {}),
-  });
+  };
+
+  return initChatModel(model, initChatModelArgs);
 }
