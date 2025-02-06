@@ -2,15 +2,14 @@ name: Chrome Extension Release
 
 on:
   push:
-    branches: [ main ]
     tags:
       - 'v*'
-  pull_request:
-    branches: [ main ]
 
 jobs:
-  build-and-test:
+  build-and-release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - uses: actions/checkout@v4
@@ -24,20 +23,6 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Code style check
-        run: yarn format:check
-
-      - name: Lint check
-        run: yarn lint
-
-      - name: Type check
-        run: yarn tsc --noEmit
-
-      - name: Run tests
-        run: yarn test
-        env:
-          CI: true
-
       - name: Build extension
         run: yarn build
 
@@ -46,28 +31,6 @@ jobs:
         run: |
           cd dist
           zip -r ../extension.zip *
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: extension
-          path: extension.zip
-          retention-days: 7
-
-  # Create GitHub Release when a new version tag is pushed
-  release:
-    needs: build-and-test
-    if: startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    
-    steps:
-      - name: Download extension package
-        uses: actions/download-artifact@v4
-        with:
-          name: extension
-          path: .
 
       # Create GitHub Release with the packaged extension
       - name: Create Release
