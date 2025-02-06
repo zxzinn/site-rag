@@ -2,8 +2,8 @@ name: Chrome Extension Release
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - main
 
 jobs:
   build-and-release:
@@ -37,4 +37,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: extension.zip
+          tag_name: release-${{ github.sha }}
+          name: Release ${{ github.sha }}
           generate_release_notes: true
